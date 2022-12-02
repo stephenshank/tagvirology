@@ -45,35 +45,33 @@ int main(int argc, char * argv[])
       seqan3::align_cfg::scoring_scheme{seqan3::nucleotide_scoring_scheme{}};
 
     int i;
+    seqan3::debug_stream << "id\talignment_1\tstart_1\tend_1\tbarcode_1\t"
+      << "alignment_2\tstart_2\tend_2\tbarcode_2\n";
     for (auto & [seq, id, qual] : file_in)
     {
-        seqan3::debug_stream << id << '\n';
+        seqan3::debug_stream << id << '\t';
 
         auto results_1 = seqan3::align_pairwise(std::tie(seq, constant_region_1), config);
         auto & res1 = *results_1.begin();
-        seqan3::debug_stream << res1.alignment() << '\n';
-        seqan3::debug_stream << "Constant region 1 aligned positions: "
+        seqan3::debug_stream << res1.alignment() << '\t'
           << res1.sequence1_begin_position()
-          << "," <<
-          res1.sequence1_end_position() << "\n";
-        seqan3::debug_stream << "Barcode 1: ";
-        for(i=0; i<8; i++) {
+          << "\t" <<
+          res1.sequence1_end_position() << "\t";
+        for(i=8; i>0; i--) {
           seqan3::debug_stream << seq[res1.sequence1_begin_position() - i - 1];
         }
-        seqan3::debug_stream << "\n\n";
+        seqan3::debug_stream << "\t";
 
         auto results_2 = seqan3::align_pairwise(std::tie(seq, constant_region_2), config);
         auto & res2 = *results_2.begin();
-        seqan3::debug_stream << res2.alignment() << '\n';
-        seqan3::debug_stream << "Contant region 2 aligned positions: "
+        seqan3::debug_stream << res2.alignment() << '\t'
           << res2.sequence1_begin_position()
-          << "," <<
-          res2.sequence1_end_position() << "\n";
-        seqan3::debug_stream << "Barcode 2: ";
-        for(i=0; i<8; i++) {
+          << "\t" <<
+          res2.sequence1_end_position() << "\t";
+        for(i=8; i>0; i--) {
           seqan3::debug_stream << seq[res2.sequence1_begin_position() - i - 1];
         }
-        seqan3::debug_stream << "\n\n\n";
+        seqan3::debug_stream << "\t\n";
     }
  
     return 0;
